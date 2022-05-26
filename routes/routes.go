@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/util/environment"
+	"gitlab.com/sholludev/sampoerna_notification/routes/handler"
 )
 
 func Init(g *echo.Group) {
@@ -13,4 +14,5 @@ func Init(g *echo.Group) {
 	})
 
 	// Routes
+	handler.NewNotificationHandler().Route(g.Group("/notifications"))
 }

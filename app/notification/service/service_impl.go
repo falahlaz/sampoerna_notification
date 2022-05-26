@@ -16,6 +16,12 @@ func NewService() Service {
 
 // SendSingleNotification implements Service
 func (s *serviceImpl) SendSingleNotification(c echo.Context, request notification.SingleNotifRequestDTO) error {
+	// validate
+	if err := c.Validate(request); err != nil {
+		return response.BuildError(response.ErrUnprocessableEntity, err)
+	}
+
+	// send notification
 	firebaseModel := firebase.SingleNotification{
 		FCMToken: request.FCMToken,
 		Message: firebase.MessageConstant{
