@@ -22,6 +22,7 @@ func Init(ctx context.Context) {
 
 func (sn *SingleNotification) Send(ctx context.Context) (string, error) {
 	var response string
+	oneHour := time.Duration(1) * time.Hour
 
 	client, err := app.Messaging(ctx)
 	if err != nil {
@@ -35,6 +36,10 @@ func (sn *SingleNotification) Send(ctx context.Context) (string, error) {
 			"message": sn.Message.Message,
 			"type":    sn.Message.Type,
 			"data":    fmt.Sprintf("%v", sn.Message.Data),
+		},
+		Android: &messaging.AndroidConfig{
+			TTL:      &oneHour,
+			Priority: "normal",
 		},
 	})
 
