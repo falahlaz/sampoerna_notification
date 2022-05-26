@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	amiddleware "gitlab.com/sholludev/sampoerna_notification/middleware"
+	"gitlab.com/sholludev/sampoerna_notification/pkg/firebase"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/log"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/util"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/util/environment"
@@ -21,6 +22,7 @@ func main() {
 	// Init
 	environment.Init()
 	log.Init()
+	firebase.Init(e.NewContext(&http.Request{}, nil).Request().Context())
 
 	// Middleware
 	e.Use(

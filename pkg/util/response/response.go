@@ -125,7 +125,7 @@ func ErrorResponse(c echo.Context, err error) error {
 
 	re, ok := err.(*ErrorConstant)
 	if ok {
-		log.InsertLogError(c, &log.LogError{
+		log.InsertLogError(c.Request().Context(), &log.LogError{
 			Header:       string(bHeader),
 			Body:         string(body),
 			URL:          c.Request().URL.Path,
