@@ -1,0 +1,24 @@
+image: docker
+
+services:
+  - docker:dind
+
+variables:
+  WORK_DIR: ${CI_PROJECT_NAME}
+  BRANCH: ${CI_COMMIT_REF_NAME}
+  REGISTRY: registry.gitlab.com/sholludev/sampoerna_notification
+
+stages:
+  - deploy
+
+test:
+  stage: deploy
+  only:
+    - master
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker --version
+    - docker-compose --version
+    - docker-compose down
+    - docker-compose up -d --build
+  tags: [deploy]

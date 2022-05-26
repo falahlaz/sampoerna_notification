@@ -1,0 +1,14 @@
+version: "3"
+services:
+  web:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8077:3000'
+    tty: true
+    container_name: sampoerna-notification-service
+    env_file: .env.staging
+    volumes:
+      - .:/app
