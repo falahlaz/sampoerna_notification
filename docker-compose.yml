@@ -1,5 +1,21 @@
 version: "3"
 services:
+  db:
+      image: mysql:5.7
+      restart: always
+      container_name: sampoerna-notifikasi-DB
+      environment:
+        MYSQL_DATABASE: sampoerna_notifikasi
+        MYSQL_USER: sampoerna-notifikasi
+        MYSQL_PASSWORD: E28<<7?bx/$K/fCG
+        MYSQL_ROOT_PASSWORD: jKA6:P+)G-%8:emd
+      command: mysqld --sql_mode=""
+      ports:
+        - '3368:3306'
+      volumes:
+        - my-db:/var/lib/mysql
+      networks:
+        - sampoerna-notifikasi
   web:
     restart: always
     build:
@@ -12,3 +28,16 @@ services:
     env_file: .env.staging
     volumes:
       - .:/app
+    networks:
+      - sampoerna-notifikasi
+
+volumes:
+  my-db:
+networks:
+  sampoerna-notifikasi:
+    driver: bridge
+    ipam:
+        driver: default
+        config:
+          - subnet: "172.37.0.0/16"
+            gateway: "172.37.0.1"

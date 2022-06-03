@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	amiddleware "gitlab.com/sholludev/sampoerna_notification/middleware"
+	"gitlab.com/sholludev/sampoerna_notification/pkg/database"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/firebase"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/log"
 	"gitlab.com/sholludev/sampoerna_notification/pkg/util"
@@ -21,6 +22,7 @@ func main() {
 
 	// Init
 	environment.Init()
+	database.Init("mysql")
 	log.Init()
 	firebase.Init(e.NewContext(&http.Request{}, nil).Request().Context())
 
@@ -42,6 +44,9 @@ func main() {
 	)
 	e.HTTPErrorHandler = amiddleware.NewErrorHandler
 	e.Validator = &util.CustomValidation{Validator: validator.New()}
+
+	// Migration
+	database.Migrate()
 
 	// Route
 	routes.Init(e.Group("/api/v1"))
