@@ -22,5 +22,8 @@ func NewNotificationHandler() *handlerNotification {
 }
 
 func (h *handlerNotification) Route(g *echo.Group) {
+	g.GET("/users/:id_user", h.Controller.GetByIDUser)
 	g.POST("/single/send", h.Controller.SendSingleNotification)
+	g.PUT("/users/:id_user/read-all", h.Controller.UpdateToReadAll)
+	g.PUT("/:id", h.Controller.UpdateToReadSingle)
 }

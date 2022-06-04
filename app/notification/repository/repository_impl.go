@@ -35,7 +35,7 @@ func (*repositoryImpl) GetByIDUser(c echo.Context, DB *gorm.DB, IDUser uint) ([]
 // UpdateToRead implements Repository
 func (*repositoryImpl) UpdateToReadAll(c echo.Context, DB *gorm.DB, IDUser uint) ([]models.TNotifikasi, error) {
 	var notifikasi []models.TNotifikasi
-	err := DB.Where("id_user = ?", IDUser).Where("is_active = true AND is_read = false").Find(&notifikasi).Error
+	err := DB.Preload("Kategori").Where("id_user = ?", IDUser).Where("is_active = true AND is_read = false").Find(&notifikasi).Error
 	if err != nil {
 		return notifikasi, err
 	}
