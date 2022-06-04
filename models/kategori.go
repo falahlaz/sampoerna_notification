@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"gitlab.com/sholludev/sampoerna_notification/app/kategori"
+)
 
 type MKategori struct {
 	ID         uint      `json:"id" gorm:"primary_key"`
@@ -12,4 +16,14 @@ type MKategori struct {
 	UpdatedBy  uint      `json:"updated_by"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
+}
+
+func (mk *MKategori) ToResponse() kategori.KategoriResponseDTO {
+	return kategori.KategoriResponseDTO{
+		ID:        mk.ID,
+		Kode:      mk.Kode,
+		Nama:      mk.Nama,
+		IsActive:  mk.IsActive,
+		CreatedAt: mk.CreatedAt.Format("2006-01-02 15:04:05"),
+	}
 }

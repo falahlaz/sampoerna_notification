@@ -21,34 +21,34 @@ func (*repositoryImpl) Create(c echo.Context, DB *gorm.DB, data *models.TNotifik
 // GetByIDUser implements Repository
 func (*repositoryImpl) GetByID(c echo.Context, DB *gorm.DB, ID uint) (models.TNotifikasi, error) {
 	var data models.TNotifikasi
-	err := DB.Where("id = ?", ID).Where("is_active = true").First(&data).Error
+	err := DB.Preload("Kategori").Where("id = ?", ID).Where("is_active = true").First(&data).Error
 	return data, err
 }
 
 // GetByID implements Repository
 func (*repositoryImpl) GetByIDUser(c echo.Context, DB *gorm.DB, IDUser uint) ([]models.TNotifikasi, error) {
 	var data []models.TNotifikasi
-	err := DB.Where("id_user = ?", IDUser).Where("is_active = true").Find(&data).Error
+	err := DB.Preload("Kategori").Where("id_user = ?", IDUser).Where("is_active = true").Find(&data).Error
 	return data, err
 }
 
 // UpdateToRead implements Repository
-func (*repositoryImpl) UpdateToReadAll(c echo.Context, DB *gorm.DB, IDUser uint) error {
+func (*repositoryImpl) UpdateToReadAll(c echo.Context, DB *gorm.DB, IDUser uint) ([]models.TNotifikasi, error) {
 	var notifikasi []models.TNotifikasi
 	err := DB.Where("id_user = ?", IDUser).Where("is_active = true AND is_read = false").Find(&notifikasi).Error
 	if err != nil {
-		return err
+		return notifikasi, err
 	}
 
 	for _, v := range notifikasi {
 		v.IsRead = true
 		err = DB.Save(&v).Error
 		if err != nil {
-			return err
+			return notifikasi, err
 		}
 	}
 
-	return nil
+	return notifikasi, nil
 }
 
 // UpdateToReadSingle implements Repository
